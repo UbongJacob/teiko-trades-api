@@ -6,6 +6,7 @@ expand(config());
 
 const EnvSchema = z.object({
   NODE_ENV: z.string().default("development"),
+  DATABASE_URL: z.string(),
   PORT: z.coerce.number().default(9999),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]),
 });

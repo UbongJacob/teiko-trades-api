@@ -15,6 +15,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
+    "noUncheckedIndexedAccess": false,
+    "disableSizeLimit": true,
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
