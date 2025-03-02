@@ -1,12 +1,11 @@
 import db from "@/db";
-import { coin, price, tokenTable, userTable } from "@/db/schema";
+import { coin, price, tokenTable } from "@/db/schema";
 import type { AppRouteHandler } from "@/lib/types";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import { fetchCallReadOnlyFunction } from "@stacks/transactions";
 import type {
   CreateRoute,
   CreateTokenRoute,
-  CreateUserRoute,
   listAllPricesRoute,
   ListRoute,
   ListTokenRoute,
@@ -113,32 +112,32 @@ export const listAllTokens: AppRouteHandler<ListTokenRoute> = async (c) => {
   });
 };
 
-const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
-  const reqData = c.req.valid("json");
+// const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
+//   const reqData = c.req.valid("json");
 
-  const [data] = await db.insert(userTable).values(reqData).returning();
+//   const [data] = await db.insert(userTable).values(reqData).returning();
 
-  return c.json(
-    {
-      message: "User created successfully",
-      status: true,
-      data,
-    },
-    HttpStatusCodes.OK
-  );
-};
+//   return c.json(
+//     {
+//       message: "User created successfully",
+//       status: true,
+//       data,
+//     },
+//     HttpStatusCodes.OK
+//   );
+// };
 
-export const listAllTokens: AppRouteHandler<ListUserRoute> = async (c) => {
-  const data = await db.query.userTable.findMany({
-    orderBy: (fields, operators) => operators.desc(fields.createdAt),
-  });
+// export const listAllTokens: AppRouteHandler<ListUserRoute> = async (c) => {
+//   const data = await db.query.userTable.findMany({
+//     orderBy: (fields, operators) => operators.desc(fields.createdAt),
+//   });
 
-  return c.json({
-    message: "users gootten successfully",
-    status: true,
-    data,
-  });
-};
+//   return c.json({
+//     message: "users gootten successfully",
+//     status: true,
+//     data,
+//   });
+// };
 
 export default {
   list,

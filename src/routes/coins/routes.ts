@@ -107,24 +107,24 @@ const listToken = createRoute({
   },
 });
 
-const createToken = createRoute({
-  path: "/token",
-  method: "post",
-  request: {
-    body: jsonContentRequired(insertTokenSchema, "The token to create"),
-  },
-  tags: tokenTags,
-  responses: {
-    [HttpStatusCodes.OK]: customJsonContent(
-      selectTokenSchema,
-      "The created user."
-    ),
-    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
-      createErrorSchema(insertTokenSchema),
-      "The validation error(s)."
-    ),
-  },
-});
+// const createToken = createRoute({
+//   path: "/token",
+//   method: "post",
+//   request: {
+//     body: jsonContentRequired(insertTokenSchema, "The token to create"),
+//   },
+//   tags: tokenTags,
+//   responses: {
+//     [HttpStatusCodes.OK]: customJsonContent(
+//       selectTokenSchema,
+//       "The created user."
+//     ),
+//     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
+//       createErrorSchema(insertTokenSchema),
+//       "The validation error(s)."
+//     ),
+//   },
+// });
 
 const listUsers = createRoute({
   path: "/users",

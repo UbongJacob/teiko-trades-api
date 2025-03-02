@@ -11,7 +11,7 @@ import { createErrorSchema } from "@/stoker/openapi/schemas";
 
 const tags = ["Tasks"];
 
-const list = createRoute({
+export const list = createRoute({
   path: "/tasks",
   method: "get",
   tags,
@@ -23,7 +23,7 @@ const list = createRoute({
   },
 });
 
-const create = createRoute({
+export const create = createRoute({
   path: "/tasks",
   method: "post",
   request: {
@@ -41,8 +41,6 @@ const create = createRoute({
     ),
   },
 });
-
-export default { list, create };
 
 export type ListRoute = typeof list;
 export type CreateRoute = typeof create;
