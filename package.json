@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "start":"node ./dist/src/index.js",
     "lint": "eslint .",
-    "studio": "yarn drizzle-kit studio "
+    "studio": "yarn drizzle-kit studio ",
+    "build": "tsc && tsc-alias"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",
@@ -35,6 +37,8 @@
     "@typescript-eslint/parser": "^8.24.0",
     "drizzle-kit": "^0.30.4",
     "eslint": "^9.20.1",
-    "tsx": "^4.7.1"
+    "tsc-alias": "^1.8.11",
+    "tsx": "^4.7.1",
+    "vitest": "^3.0.7"
   }
 }

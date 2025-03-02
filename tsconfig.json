@@ -18,8 +18,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "outDir": "./dist"
   },
 
-  "exclude": ["./src/routes/tasks/index.ts"]
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }
