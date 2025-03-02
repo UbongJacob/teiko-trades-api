@@ -26,20 +26,21 @@ export default function configureOpenApi(app: AppOpenAPI) {
         url: "/doc",
       },
 
-      servers: [
-        {
-          url: `http://localhost:${env.PORT}`,
-          description: "Local",
-        },
-        {
-          url: "https://staging.scalar.com",
-          description: "Staging",
-        },
-        {
-          url: "https://api.scalar.com",
-          description: "Production",
-        },
-      ],
+      servers: [getServer()],
     })
   );
+}
+
+function getServer() {
+  if (env?.NODE_ENV != "production") {
+    return {
+      url: `http://localhost:${env.PORT}`,
+      description: "Local",
+    };
+  }
+
+  return {
+    url: env.APP_URL,
+    description: "Staging",
+  };
 }
