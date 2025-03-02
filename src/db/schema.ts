@@ -87,3 +87,4 @@ export const insertUserSchema = createInsertSchema(userTable).omit({
 });
 
 export const selectUserSchema = createSelectSchema(userTable);
+export const patchTaskSchema = insertTaskSchema.partial();
