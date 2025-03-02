@@ -2,11 +2,10 @@ import index from "@/routes/index.routes";
 import configureOpenApi from "./lib/configure-open-api";
 import createApp from "./lib/create-app";
 import tasks from "./routes/tasks";
-import coins from "./routes/coins";
 
 const app = createApp();
 
-const routes = [index, coins, tasks];
+const routes = [index, tasks];
 
 configureOpenApi(app);
 
