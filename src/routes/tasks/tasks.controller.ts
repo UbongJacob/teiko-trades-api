@@ -7,7 +7,7 @@ import type {
   PatchRoute,
   RemoveRoute,
 } from "./tasks.routes";
-import { tasks } from "@/db/schema";
+import { tasks } from "@/db/schema/tasks.schema";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import { eq } from "drizzle-orm";
 

@@ -4,7 +4,7 @@ import {
   insertTaskSchema,
   patchTaskSchema,
   selectTasksSchema,
-} from "@/db/schema";
+} from "@/db/schema/tasks.schema";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import { jsonContentRequired } from "@/stoker/openapi/helpers";
 import {
