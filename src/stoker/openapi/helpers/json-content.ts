@@ -3,7 +3,7 @@ import type { ZodSchema } from "./types.ts";
 import oneOf from "./one-of.js";
 import createErrorSchema from "../schemas/create-error-schema.js";
 
-const jsonContent = (schema: ZodSchema, description: string) => {
+const jsonContent = <T extends ZodSchema>(schema: T, description: string) => {
   return {
     content: {
       "application/json": {

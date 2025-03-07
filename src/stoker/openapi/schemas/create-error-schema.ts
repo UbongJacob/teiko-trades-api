@@ -2,7 +2,7 @@ import { z } from "@hono/zod-openapi";
 
 import type { ZodSchema } from "../helpers/types.ts";
 
-const createErrorSchema = (schema: ZodSchema) => {
+const createErrorSchema = <T extends ZodSchema>(schema: T) => {
   const { error } = schema.safeParse(
     schema._def.typeName === z.ZodFirstPartyTypeKind.ZodArray ? [] : {}
   );

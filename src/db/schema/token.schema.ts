@@ -44,8 +44,8 @@ export const patchTokensSchema = insertTokensSchema.partial();
 export const UserFavouritesTokensTable = pgTable("favouritesTokens", {
   id: serial().primaryKey(),
   userId: varchar({ length: 255 })
-    .references(() => UsersTable.walletAddress)
-    .notNull(),
+    .notNull()
+    .references(() => UsersTable.walletAddress),
   tokenId: integer()
     .notNull()
     .references(() => TokensTable.id),
@@ -112,9 +112,13 @@ export const UserFavouritesTokensRelations = relations(
   UserFavouritesTokensTable,
   ({ one }) => {
     return {
-      overview: one(TokensTable, {
+      token: one(TokensTable, {
         fields: [UserFavouritesTokensTable.tokenId],
         references: [TokensTable.id],
+      }),
+      user: one(UsersTable, {
+        fields: [UserFavouritesTokensTable.userId],
+        references: [UsersTable.walletAddress],
       }),
     };
   }
