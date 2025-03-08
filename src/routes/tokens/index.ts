@@ -3,7 +3,7 @@ import * as controllers from "./controllers";
 import * as routes from "./routes";
 
 const tokensRouter = createRouter()
-  .openapi(routes.list, controllers.listUserCreatedToken)
+  .openapi(routes.list, controllers.list)
   .openapi(routes.create, controllers.create)
   .openapi(routes.listOverview, controllers.listOverview)
   .openapi(routes.listFavourites, controllers.listFavourites)
