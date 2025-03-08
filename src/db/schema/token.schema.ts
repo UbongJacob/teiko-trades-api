@@ -13,7 +13,7 @@ import { relations } from "drizzle-orm";
 
 export const TokensTable = pgTable("tokens", {
   id: serial().primaryKey(),
-  dexName: varchar({ length: 255 }).unique(),
+  dexName: varchar({ length: 255 }).unique().notNull(),
   ticker: varchar({ length: 255 }).notNull(),
   uri: varchar({ length: 255 }).notNull(),
   name: varchar({ length: 255 }).notNull(),
