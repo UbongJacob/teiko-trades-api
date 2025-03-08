@@ -7,6 +7,7 @@ import type {
   GetOneRoute,
   ListFavouritesRoute,
   ListOverviewRoute,
+  ListRoute,
   ListUserCreatedTokensRoute,
   PatchRoute,
 } from "./routes";
@@ -63,6 +64,18 @@ export const listUserCreatedToken: AppRouteHandler<
   return c.json(
     {
       message: "User created tokens retrieved successfully",
+      status: true,
+      data,
+    },
+    HttpStatusCodes.OK
+  );
+};
+export const list: AppRouteHandler<ListRoute> = async (c) => {
+  const data = await db.query.TokensTable.findMany();
+
+  return c.json(
+    {
+      message: "All tokens retrieved successfully",
       status: true,
       data,
     },

@@ -19,6 +19,21 @@ import { IdParamsSchema, SlugParamsSchema } from "@/stoker/openapi/schemas";
 
 const tags = ["Tokens"];
 
+export const list = createRoute({
+  path: "/tokens}",
+  method: "get",
+  request: {
+    params: SlugParamsSchema,
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      z.array(selectTokensSchema),
+      "The list of all tokens"
+    ),
+  },
+});
+
 export const listFavourites = createRoute({
   path: "/tokens/favourites/{slug}",
   method: "get",
@@ -152,6 +167,7 @@ export const getOne = createRoute({
   },
 });
 
+export type ListRoute = typeof list;
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
 export type ListFavouritesRoute = typeof listFavourites;
