@@ -18,15 +18,15 @@ export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
     where: (fields, operators) => operators.eq(fields?.userId, slug),
   });
 
-  if (data?.length < 1) {
-    return c.json(
-      {
-        message: "Not found.",
-        status: false,
-      },
-      HttpStatusCodes.NOT_FOUND
-    );
-  }
+  // if (data?.length < 1) {
+  //   return c.json(
+  //     {
+  //       message: "Not found.",
+  //       status: false,
+  //     },
+  //     HttpStatusCodes.NOT_FOUND
+  //   );
+  // }
 
   return c.json(
     {
@@ -47,15 +47,15 @@ export const listUserCreatedToken: AppRouteHandler<
     where: (fields, operators) => operators.eq(fields?.userId, slug),
   });
 
-  if (data?.length < 1) {
-    return c.json(
-      {
-        message: "Not found.",
-        status: false,
-      },
-      HttpStatusCodes.NOT_FOUND
-    );
-  }
+  // if (data?.length < 1) {
+  //   return c.json(
+  //     {
+  //       message: "Not found.",
+  //       status: false,
+  //     },
+  //     HttpStatusCodes.NOT_FOUND
+  //   );
+  // }
 
   return c.json(
     {
