@@ -127,8 +127,34 @@ export const patch = createRoute({
   },
 });
 
+export const getOne = createRoute({
+  path: "/tokens/{slug}",
+  method: "get",
+  request: {
+    params: SlugParamsSchema,
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      selectTokensSchema,
+      "The requested token"
+    ),
+
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
+      SlugParamsSchema,
+      "Invalid Id error."
+    ),
+
+    [HttpStatusCodes.NOT_FOUND]: customMessageContent(
+      false,
+      "Token not found."
+    ),
+  },
+});
+
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
 export type ListFavouritesRoute = typeof listFavourites;
 export type ListUserCreatedTokensRoute = typeof listUserCreatedTokens;
 export type PatchRoute = typeof patch;
+export type GetOneRoute = typeof getOne;

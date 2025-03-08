@@ -4,6 +4,7 @@ import type { AppRouteHandler } from "@/lib/types";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import type {
   CreateRoute,
+  GetOneRoute,
   ListFavouritesRoute,
   ListOverviewRoute,
   ListUserCreatedTokensRoute,
@@ -137,6 +138,33 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
       message: "Token updated successfully",
       status: true,
       data,
+    },
+    HttpStatusCodes.OK
+  );
+};
+
+export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
+  const { slug } = c.req.valid("param");
+
+  const task = await db.query.TokensTable.findFirst({
+    where: (fields, operators) => operators.eq(fields?.dexName, slug),
+  });
+
+  if (!task) {
+    return c.json(
+      {
+        message: "Not found.",
+        status: false,
+      },
+      HttpStatusCodes.NOT_FOUND
+    );
+  }
+
+  return c.json(
+    {
+      message: "Token retrieved successfully",
+      status: true,
+      data: task,
     },
     HttpStatusCodes.OK
   );

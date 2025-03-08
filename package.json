@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "studio": "yarn drizzle-kit studio ",
     "build": "tsc && tsc-alias",
-    "migrate": "npx drizzle-kit push"
+    "migrate": "yarn db:push",
+    "db:push": "npx drizzle-kit push",
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:generate": "npx drizzle-kit generate"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",
