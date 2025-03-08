@@ -23,7 +23,7 @@ export default function createApp() {
   app.onError(onError);
 
   app.use(
-    "*",
+    "/*",
     cors({
       origin: ["http://localhost:3000", "https://teiko-trades.netlify.app"],
       allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
