@@ -22,9 +22,6 @@ const tags = ["Tokens"];
 export const list = createRoute({
   path: "/tokens",
   method: "get",
-  request: {
-    params: SlugParamsSchema,
-  },
   tags,
   responses: {
     [HttpStatusCodes.OK]: customJsonContent(
