@@ -26,7 +26,7 @@ export default function createApp() {
     "/*",
     cors({
       origin: ["http://localhost:3000", "https://teiko-trades.netlify.app"],
-      // allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
+      allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
       allowMethods: ["POST", "GET", "PATCH", "DELETE"],
       exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
       maxAge: 600,
