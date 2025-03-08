@@ -128,7 +128,7 @@ export const patch = createRoute({
 });
 
 export const getOne = createRoute({
-  path: "/tokens/{slug}",
+  path: "/tokens/single/{slug}",
   method: "get",
   request: {
     params: SlugParamsSchema,
