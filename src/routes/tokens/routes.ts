@@ -2,6 +2,7 @@ import { createRoute, z } from "@hono/zod-openapi";
 
 import {
   insertTokensSchema,
+  patchTokensSchema,
   selectFavouritesTokensSchema,
   selectOverviewTokensSchema,
   selectTokensSchema,
@@ -12,8 +13,9 @@ import {
   customJsonContent,
   customJsonErrorContent,
   customMessageContent,
+  oneOfErrorSchema,
 } from "@/stoker/openapi/helpers/json-content";
-import { SlugParamsSchema } from "@/stoker/openapi/schemas";
+import { IdParamsSchema, SlugParamsSchema } from "@/stoker/openapi/schemas";
 
 const tags = ["Tokens"];
 
@@ -99,7 +101,34 @@ export const create = createRoute({
   },
 });
 
+export const patch = createRoute({
+  path: "/tokens/{id}",
+  method: "patch",
+  request: {
+    params: IdParamsSchema,
+    body: jsonContentRequired(patchTokensSchema, ""),
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      selectTokensSchema,
+      "The updated token."
+    ),
+
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: oneOfErrorSchema(
+      [IdParamsSchema, patchTokensSchema],
+      "The validation error(s)."
+    ),
+
+    [HttpStatusCodes.NOT_FOUND]: customMessageContent(
+      false,
+      "Token not found."
+    ),
+  },
+});
+
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
 export type ListFavouritesRoute = typeof listFavourites;
 export type ListUserCreatedTokensRoute = typeof listUserCreatedTokens;
+export type PatchRoute = typeof patch;

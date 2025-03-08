@@ -6,6 +6,7 @@ const tokensRouter = createRouter()
   .openapi(routes.create, controllers.create)
   .openapi(routes.listOverview, controllers.listOverview)
   .openapi(routes.listFavourites, controllers.listFavourites)
-  .openapi(routes.listUserCreatedTokens, controllers.listUserCreatedToken);
+  .openapi(routes.listUserCreatedTokens, controllers.listUserCreatedToken)
+  .openapi(routes.patch, controllers.patch);
 
 export default tokensRouter;

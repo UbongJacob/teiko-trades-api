@@ -7,7 +7,9 @@ import type {
   ListFavouritesRoute,
   ListOverviewRoute,
   ListUserCreatedTokensRoute,
+  PatchRoute,
 } from "./routes";
+import { eq } from "drizzle-orm";
 
 export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
   c
@@ -102,7 +104,37 @@ export const create: AppRouteHandler<CreateRoute> = async (c) => {
 
   return c.json(
     {
-      message: "Task created successfully",
+      message: "Token created successfully",
+      status: true,
+      data,
+    },
+    HttpStatusCodes.OK
+  );
+};
+
+export const patch: AppRouteHandler<PatchRoute> = async (c) => {
+  const { id } = c.req.valid("param");
+  const updates = c.req.valid("json");
+
+  const [data] = await db
+    .update(TokensTable)
+    .set(updates)
+    .where(eq(TokensTable.id, id))
+    .returning();
+
+  if (!data) {
+    return c.json(
+      {
+        message: "Token not found.",
+        status: false,
+      },
+      HttpStatusCodes.NOT_FOUND
+    );
+  }
+
+  return c.json(
+    {
+      message: "Token updated successfully",
       status: true,
       data,
     },

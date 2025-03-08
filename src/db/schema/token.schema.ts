@@ -14,7 +14,7 @@ import { relations } from "drizzle-orm";
 export const TokensTable = pgTable("tokens", {
   id: serial().primaryKey(),
   address: varchar({ length: 255 }).notNull().unique(),
-  dexAddress: varchar({ length: 255 }).notNull().unique(),
+  dexAddress: varchar({ length: 255 }).unique(),
   ticker: varchar({ length: 255 }).notNull(),
   uri: varchar({ length: 255 }).notNull(),
   name: varchar({ length: 255 }).notNull(),
@@ -35,7 +35,12 @@ export const insertTokensSchema = createInsertSchema(TokensTable, {
   updatedAt: true,
 });
 
-export const patchTokensSchema = insertTokensSchema.partial();
+export const patchTokensSchema = insertTokensSchema.partial().omit({
+  address: true,
+  name: true,
+  ticker: true,
+  userId: true,
+});
 
 // TOKENS SCHEMA ENDS
 
