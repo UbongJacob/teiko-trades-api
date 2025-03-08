@@ -20,7 +20,7 @@ import { IdParamsSchema, SlugParamsSchema } from "@/stoker/openapi/schemas";
 const tags = ["Tokens"];
 
 export const list = createRoute({
-  path: "/tokens}",
+  path: "/tokens",
   method: "get",
   request: {
     params: SlugParamsSchema,
