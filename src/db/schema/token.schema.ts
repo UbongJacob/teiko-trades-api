@@ -1,5 +1,6 @@
 import {
   integer,
+  pgEnum,
   pgTable,
   serial,
   timestamp,
@@ -11,12 +12,15 @@ import { relations } from "drizzle-orm";
 
 // TOKENS SCHEMA STARTS
 
+export const BaseCurrency = pgEnum("baseCurrency", ["sbtc", "stx"]);
+
 export const TokensTable = pgTable("tokens", {
   id: serial().primaryKey(),
   dexName: varchar({ length: 255 }).unique(),
   ticker: varchar({ length: 255 }).notNull(),
   uri: varchar({ length: 255 }).notNull(),
   name: varchar({ length: 255 }).notNull(),
+  baseCurrency: BaseCurrency().default("sbtc").notNull(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp().defaultNow().notNull(),
   userId: varchar({ length: 255 })
