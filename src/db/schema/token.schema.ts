@@ -43,7 +43,6 @@ export const patchTokensSchema = insertTokensSchema.partial().omit({
   ticker: true,
   userId: true,
 });
-
 // TOKENS SCHEMA ENDS
 
 // FAVOURITES TOKENS
