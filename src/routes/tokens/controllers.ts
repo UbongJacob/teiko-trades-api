@@ -1,5 +1,5 @@
 import db from "@/db";
-import { TokensTable } from "@/db/schema";
+import { TokensTable, UserFavouritesTokensTable } from "@/db/schema";
 import type { AppRouteHandler } from "@/lib/types";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import type {
@@ -10,8 +10,9 @@ import type {
   ListRoute,
   ListUserCreatedTokensRoute,
   PatchRoute,
+  ToggleFavouriteRoute,
 } from "./routes";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
   c
@@ -40,6 +41,81 @@ export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
     },
     HttpStatusCodes.OK
   );
+};
+
+export const toggleFavourite: AppRouteHandler<ToggleFavouriteRoute> = async (
+  c
+) => {
+  const reqData = c.req.valid("json");
+
+  const user = await db.query.UsersTable.findFirst({
+    where: (fields, operators) =>
+      operators.eq(fields?.walletAddress, reqData?.userId),
+  });
+
+  if (!user) {
+    return c.json(
+      {
+        message: "User Not Found.",
+        status: false,
+      },
+      HttpStatusCodes.NOT_FOUND
+    );
+  }
+  const token = await db.query.TokensTable.findFirst({
+    where: (fields, operators) => operators.eq(fields?.id, reqData?.tokenId),
+  });
+
+  if (!token) {
+    return c.json(
+      {
+        message: "Token Not Found.",
+        status: false,
+      },
+      HttpStatusCodes.NOT_FOUND
+    );
+  }
+
+  const favouriteToken = await db.query.UserFavouritesTokensTable.findFirst({
+    where: (fields, operators) =>
+      operators.and(
+        operators.eq(fields?.tokenId, reqData?.tokenId),
+        operators.eq(fields?.userId, reqData?.userId)
+      ),
+  });
+
+  if (favouriteToken) {
+    await db
+      .delete(UserFavouritesTokensTable)
+      .where(
+        and(
+          eq(UserFavouritesTokensTable?.tokenId, reqData?.tokenId),
+          eq(UserFavouritesTokensTable?.userId, reqData?.userId)
+        )
+      );
+    return c.json(
+      {
+        message: "Favourite removed successfully",
+        status: true,
+        data: favouriteToken,
+      },
+      HttpStatusCodes.OK
+    );
+  } else {
+    const [data] = await db
+      .insert(UserFavouritesTokensTable)
+      .values({ tokenId: token?.id, userId: user?.walletAddress })
+      .returning();
+
+    return c.json(
+      {
+        message: "Favourite added successfully",
+        status: true,
+        data,
+      },
+      HttpStatusCodes.OK
+    );
+  }
 };
 
 export const listUserCreatedToken: AppRouteHandler<
