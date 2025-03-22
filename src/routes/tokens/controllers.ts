@@ -5,6 +5,7 @@ import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import type {
   CreateRoute,
   GetOneRoute,
+  GetTokenChartDataRoute,
   ListFavouritesRoute,
   ListOverviewRoute,
   ListRoute,
@@ -44,6 +45,38 @@ export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
   return c.json(
     {
       message: "Favourites retrieved successfully",
+      status: true,
+      data,
+    },
+    HttpStatusCodes.OK
+  );
+};
+
+export const getTokenChartData: AppRouteHandler<
+  GetTokenChartDataRoute
+> = async (c) => {
+  const { id } = c.req.valid("param");
+
+  const data = await db.query.TokenPriceTable.findMany({
+    where: (fields, operators) => operators.eq(fields?.tokenId, id),
+    columns: {
+      tokenId: false,
+    },
+  });
+
+  // if (data?.length < 1) {
+  //   return c.json(
+  //     {
+  //       message: "Not found.",
+  //       status: false,
+  //     },
+  //     HttpStatusCodes.NOT_FOUND
+  //   );
+  // }
+
+  return c.json(
+    {
+      message: "Price history retrieved successfully",
       status: true,
       data,
     },

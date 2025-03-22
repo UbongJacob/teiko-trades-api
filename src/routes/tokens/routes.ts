@@ -6,6 +6,7 @@ import {
   patchTokensSchema,
   selectFavouritesTokensSchema,
   selectOverviewTokensSchema,
+  selectPriceTokensSchema,
   selectTokensSchema,
 } from "@/db/schema";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
@@ -188,6 +189,31 @@ export const toggleFavourite = createRoute({
   },
 });
 
+export const getTokenChartData = createRoute({
+  path: "/tokens/chart/{id}",
+  method: "get",
+  request: {
+    params: IdParamsSchema,
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      z.array(selectPriceTokensSchema),
+      "The chart data for a token"
+    ),
+
+    // [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
+    //   IdParamsSchema,
+    //   "Invalid id error."
+    // ),
+
+    // [HttpStatusCodes.NOT_FOUND]: customMessageContent(
+    //   false,
+    //   "Token not found."
+    // ),
+  },
+});
+
 export type ListRoute = typeof list;
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
@@ -196,3 +222,4 @@ export type ListUserCreatedTokensRoute = typeof listUserCreatedTokens;
 export type PatchRoute = typeof patch;
 export type GetOneRoute = typeof getOne;
 export type ToggleFavouriteRoute = typeof toggleFavourite;
+export type GetTokenChartDataRoute = typeof getTokenChartData;
