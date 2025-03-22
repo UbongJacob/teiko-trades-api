@@ -83,13 +83,21 @@ export const patchfavouritesTokensSchema =
 
 // TOKEN PRICE TABLE
 
-export const TokenPriceTable = pgTable("tokenPrice", {
-  price: varchar({ length: 255 }).notNull(),
-  tokenId: integer()
-    .notNull()
-    .references(() => TokensTable.id),
-  createdAt: timestamp().defaultNow().notNull(),
-});
+export const TokenPriceTable = pgTable(
+  "tokenPrice",
+  {
+    price: varchar({ length: 255 }).notNull(),
+    tokenId: integer()
+      .notNull()
+      .references(() => TokensTable.id),
+    createdAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.tokenId, table.price] }),
+    };
+  }
+);
 
 export const selectPriceTokensSchema = createSelectSchema(TokenPriceTable).omit(
   {
