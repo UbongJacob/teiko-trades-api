@@ -1,6 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
 import {
+  insertFavouritesTokensSchema,
   insertTokensSchema,
   patchTokensSchema,
   selectFavouritesTokensSchema,
@@ -164,6 +165,29 @@ export const getOne = createRoute({
   },
 });
 
+export const toggleFavourite = createRoute({
+  path: "/tokens/favourites",
+  method: "post",
+  request: {
+    body: jsonContentRequired(insertFavouritesTokensSchema, ""),
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      selectFavouritesTokensSchema,
+      "The added favourite token."
+    ),
+    [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
+      insertFavouritesTokensSchema,
+      "The validation error(s)."
+    ),
+    [HttpStatusCodes.NOT_FOUND]: customMessageContent(
+      false,
+      "Token or user not found."
+    ),
+  },
+});
+
 export type ListRoute = typeof list;
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
@@ -171,3 +195,4 @@ export type ListFavouritesRoute = typeof listFavourites;
 export type ListUserCreatedTokensRoute = typeof listUserCreatedTokens;
 export type PatchRoute = typeof patch;
 export type GetOneRoute = typeof getOne;
+export type ToggleFavouriteRoute = typeof toggleFavourite;

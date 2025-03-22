@@ -2,6 +2,7 @@ import {
   integer,
   pgEnum,
   pgTable,
+  primaryKey,
   serial,
   timestamp,
   varchar,
@@ -47,16 +48,24 @@ export const patchTokensSchema = insertTokensSchema.partial().omit({
 
 // FAVOURITES TOKENS
 
-export const UserFavouritesTokensTable = pgTable("favouritesTokens", {
-  id: serial().primaryKey(),
-  userId: varchar({ length: 255 })
-    .notNull()
-    .references(() => UsersTable.walletAddress),
-  tokenId: integer()
-    .notNull()
-    .references(() => TokensTable.id),
-  createdAt: timestamp().defaultNow().notNull(),
-});
+export const UserFavouritesTokensTable = pgTable(
+  "favouritesTokens",
+  {
+    // id: serial().primaryKey(),
+    userId: varchar({ length: 255 })
+      .notNull()
+      .references(() => UsersTable.walletAddress),
+    tokenId: integer()
+      .notNull()
+      .references(() => TokensTable.id),
+    createdAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId, table.tokenId] }),
+    };
+  }
+);
 
 export const selectFavouritesTokensSchema = createSelectSchema(
   UserFavouritesTokensTable
@@ -65,7 +74,7 @@ export const selectFavouritesTokensSchema = createSelectSchema(
 export const insertFavouritesTokensSchema = createInsertSchema(
   UserFavouritesTokensTable
 ).omit({
-  id: true,
+  // id: true,
   createdAt: true,
 });
 
