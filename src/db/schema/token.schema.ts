@@ -81,6 +81,27 @@ export const insertFavouritesTokensSchema = createInsertSchema(
 export const patchfavouritesTokensSchema =
   insertFavouritesTokensSchema.partial();
 
+// TOKEN PRICE TABLE
+
+export const TokenPriceTable = pgTable("tokenPrice", {
+  price: varchar({ length: 255 }).notNull(),
+  tokenId: integer()
+    .notNull()
+    .references(() => TokensTable.id),
+  createdAt: timestamp().defaultNow().notNull(),
+});
+
+export const selectPriceTokensSchema = createSelectSchema(TokenPriceTable).omit(
+  {
+    tokenId: true,
+  }
+);
+
+const insertPriceToken = createInsertSchema(TokenPriceTable).omit({
+  createdAt: true,
+});
+export type IinsertPriceToken = typeof insertPriceToken._type;
+
 // OVERVIEW TOKENS
 
 export const OverviewTokensTable = pgTable("overviewTokens", {
