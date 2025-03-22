@@ -21,6 +21,14 @@ export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
 
   const data = await db.query.UserFavouritesTokensTable.findMany({
     where: (fields, operators) => operators.eq(fields?.userId, slug),
+    with: {
+      token: {
+        columns: {
+          ticker: true,
+          dexName: true,
+        },
+      },
+    },
   });
 
   // if (data?.length < 1) {
