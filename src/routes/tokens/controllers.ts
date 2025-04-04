@@ -1,11 +1,17 @@
 import db from "@/db";
-import { TokensTable, UserFavouritesTokensTable } from "@/db/schema";
+import {
+  TokenPriceTable,
+  TokensTable,
+  UserFavouritesTokensTable,
+  type IinsertPriceToken,
+} from "@/db/schema";
 import type { AppRouteHandler } from "@/lib/types";
 import { HttpStatusCodes } from "@/stoker/http-status-codes-defined";
 import type {
   CreateRoute,
   GetOneRoute,
   GetTokenChartDataRoute,
+  GetTokenPriceRoute,
   ListFavouritesRoute,
   ListOverviewRoute,
   ListRoute,
@@ -14,6 +20,7 @@ import type {
   ToggleFavouriteRoute,
 } from "./routes";
 import { and, eq } from "drizzle-orm";
+import { cvToValue, fetchCallReadOnlyFunction } from "@stacks/transactions";
 
 export const listFavourites: AppRouteHandler<ListFavouritesRoute> = async (
   c
@@ -79,6 +86,80 @@ export const getTokenChartData: AppRouteHandler<
       message: "Price history retrieved successfully",
       status: true,
       data,
+    },
+    HttpStatusCodes.OK
+  );
+};
+
+export const getTokenPrice: AppRouteHandler<GetTokenPriceRoute> = async (c) => {
+  const { id } = c.req.valid("param");
+
+  const token = await db.query.TokensTable.findFirst({
+    where: (fields, operators) => operators.eq(fields?.id, id),
+  });
+
+  if (!token) {
+    return c.json(
+      {
+        message: "Token not found.",
+        status: false,
+        data: null,
+      },
+      HttpStatusCodes.NOT_FOUND
+    );
+  }
+
+  try {
+    const tokens = [token];
+
+    const tokenWithPrices: IinsertPriceToken[] = [];
+
+    const promises = tokens.map(async ({ dexName, userId, id }) => {
+      if (!!dexName && !!userId && !!id) {
+        try {
+          const response = await fetchCallReadOnlyFunction({
+            contractAddress: userId,
+            contractName: dexName,
+            functionName: "get-price",
+            functionArgs: [],
+            network: "testnet",
+            senderAddress: userId,
+          });
+
+          const price = cvToValue(response)?.value ?? "";
+
+          tokenWithPrices.push({ price, tokenId: id });
+        } catch (error) {
+          console.log("A fetch error occurred");
+        }
+      }
+    });
+
+    // Wait for all promises to resolve
+    await Promise.all(promises);
+
+    if (tokenWithPrices.length > 0) {
+      await db.insert(TokenPriceTable).values(tokenWithPrices);
+    }
+  } catch (error) {
+    console.log("An error occurred", error);
+  }
+
+  // if (data?.length < 1) {
+  //   return c.json(
+  //     {
+  //       message: "Not found.",
+  //       status: false,
+  //     },
+  //     HttpStatusCodes.NOT_FOUND
+  //   );
+  // }
+
+  return c.json(
+    {
+      message: "Price history retrieved successfully",
+      status: false,
+      data: null,
     },
     HttpStatusCodes.OK
   );

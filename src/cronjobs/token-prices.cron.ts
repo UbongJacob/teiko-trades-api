@@ -3,7 +3,7 @@ import { fetchCallReadOnlyFunction, cvToValue } from "@stacks/transactions";
 import db from "@/db";
 import { TokenPriceTable, type IinsertPriceToken } from "@/db/schema";
 
-export const getPrice = async () => {
+export const getAllPrices = async () => {
   try {
     const tokens = await db.query.TokensTable.findMany();
 
