@@ -214,6 +214,31 @@ export const getTokenChartData = createRoute({
   },
 });
 
+export const getTokenPrice = createRoute({
+  path: "/tokens/price/{id}",
+  method: "get",
+  request: {
+    params: IdParamsSchema,
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: customJsonContent(
+      z.null(),
+      "The new price for a token"
+    ),
+
+    // [HttpStatusCodes.UNPROCESSABLE_ENTITY]: customJsonErrorContent(
+    //   IdParamsSchema,
+    //   "Invalid id error."
+    // ),
+
+    [HttpStatusCodes.NOT_FOUND]: customMessageContent(
+      false,
+      "Token not found."
+    ),
+  },
+});
+
 export type ListRoute = typeof list;
 export type ListOverviewRoute = typeof listOverview;
 export type CreateRoute = typeof create;
@@ -223,3 +248,4 @@ export type PatchRoute = typeof patch;
 export type GetOneRoute = typeof getOne;
 export type ToggleFavouriteRoute = typeof toggleFavourite;
 export type GetTokenChartDataRoute = typeof getTokenChartData;
+export type GetTokenPriceRoute = typeof getTokenPrice;

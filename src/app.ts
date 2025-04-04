@@ -1,11 +1,8 @@
-import { Cron } from "croner";
-
 import index from "@/routes/index.routes";
 import configureOpenApi from "./lib/configure-open-api";
 import createApp from "./lib/create-app";
 import tokensRouter from "./routes/tokens";
 import usersRouter from "./routes/users";
-import { getPrice } from "./cronjobs/token-prices.cron";
 
 const app = createApp();
 
@@ -15,9 +12,9 @@ configureOpenApi(app);
 
 routes.forEach((route) => app.route("/", route));
 
-new Cron("* * * * *", () => {
-  console.log("This will every 1 minute");
-  getPrice();
-});
+// new Cron("* * * * *", () => {
+//   console.log("This will every 1 minute");
+//   getPrice();
+// });
 
 export default app;

@@ -11,6 +11,7 @@ const tokensRouter = createRouter()
   .openapi(routes.listUserCreatedTokens, controllers.listUserCreatedToken)
   .openapi(routes.patch, controllers.patch)
   .openapi(routes.getTokenChartData, controllers.getTokenChartData)
+  .openapi(routes.getTokenPrice, controllers.getTokenPrice)
   .openapi(routes.getOne, controllers.getOne);
 
 export default tokensRouter;
